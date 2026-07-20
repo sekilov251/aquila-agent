@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <title>Aquila Agent — by Savez</title>
+  <meta name="description" content="Aquila Agent — the self-improving AI agent by Savez. Open source, MIT licensed. Download for Windows, macOS, and Linux." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #f5c518;
+      --gold-deep: #c99e06;
+      --cream: #f7e9b4;
+      --ink: #0b0803;
+      --ink-2: #151004;
+      --line: rgba(245, 197, 24, 0.18);
+      --muted: rgba(247, 233, 180, 0.55);
+      --serif: "Instrument Serif", "Times New Roman", serif;
+      --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: var(--mono);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+    ::selection { background: var(--gold); color: var(--ink); }
+
+    /* ---------- nav ---------- */
+    nav {
+      position: fixed; inset: 0 0 auto 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.5rem;
+      font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      background: color-mix(in srgb, var(--ink) 82%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    nav .brand { display: flex; align-items: center; gap: 0.6rem; font-weight: 600; color: var(--gold); text-decoration: none; }
+    nav .brand img { width: 22px; height: 22px; border-radius: 5px; }
+    nav .links { display: flex; gap: 1.75rem; }
+    nav .links a { text-decoration: none; color: var(--muted); transition: color 0.15s; }
+    nav .links a:hover { color: var(--gold); }
+
+    /* ---------- hero ---------- */
+    header {
+      position: relative; min-height: 100svh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 7rem 1.5rem 4rem; gap: 2.2rem;
+    }
+    .hero-art {
+      position: absolute; inset: 0; z-index: -1;
+      background-image: url("eagle.png");
+      background-size: min(1200px, 130vw) auto;
+      background-position: center 38%;
+      background-repeat: no-repeat;
+      opacity: 0.5;
+      mask-image: radial-gradient(ellipse 52% 60% at 50% 40%, #000 28%, transparent 66%);
+      -webkit-mask-image: radial-gradient(ellipse 52% 60% at 50% 40%, #000 28%, transparent 66%);
+    }
+    .eyebrow {
+      font-size: 0.7rem; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--gold-deep);
+      border: 1px solid var(--line); border-radius: 999px;
+      padding: 0.45rem 1.1rem;
+      background: color-mix(in srgb, var(--ink) 60%, transparent);
+    }
+    h1 {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(3rem, 10.5vw, 7.8rem);
+      line-height: 0.98; letter-spacing: 0.06em; text-transform: uppercase;
+      background: linear-gradient(178deg, #fbe08a 0%, var(--gold) 48%, #a37f05 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-shadow: 0 0 80px rgba(245, 197, 24, 0.18);
+    }
+    .hero-sub { max-width: 34rem; font-size: 0.85rem; line-height: 1.7; color: var(--muted); }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 0.9rem; justify-content: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      font-family: var(--mono); font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
+      padding: 0.95rem 1.7rem; border-radius: 4px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s;
+    }
+    .btn-gold {
+      color: #201900;
+      background: linear-gradient(180deg, #f9d23c, var(--gold) 55%, #dfb20e);
+      box-shadow: 0 10px 30px -12px rgba(245, 197, 24, 0.55), inset 0 1px 0 rgba(255,255,255,0.4);
+    }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 16px 36px -12px rgba(245, 197, 24, 0.7), inset 0 1px 0 rgba(255,255,255,0.4); }
+    .btn-ghost { color: var(--cream); border: 1px solid var(--line); background: color-mix(in srgb, var(--ink) 55%, transparent); }
+    .btn-ghost:hover { border-color: var(--gold-deep); color: var(--gold); }
+    .scroll-hint { position: absolute; bottom: 1.4rem; font-size: 0.65rem; letter-spacing: 0.3em; color: var(--muted); animation: bob 2.4s ease-in-out infinite; }
+    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+    /* ---------- sections ---------- */
+    section { padding: 5.5rem 1.5rem; max-width: 72rem; margin: 0 auto; }
+    .kicker {
+      font-family: var(--serif); text-transform: uppercase; font-size: clamp(2rem, 6vw, 4rem);
+      line-height: 1; letter-spacing: 0.05em; color: var(--gold); margin-bottom: 2.8rem;
+    }
+    .kicker span { color: var(--cream); }
+
+    /* install */
+    .install-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .os-card {
+      border: 1px solid var(--line); border-radius: 8px; padding: 1.6rem;
+      background: linear-gradient(165deg, var(--ink-2), var(--ink));
+      display: flex; flex-direction: column; gap: 0.9rem;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .os-card:hover { border-color: var(--gold-deep); transform: translateY(-3px); }
+    .os-card .os { font-size: 0.68rem; letter-spacing: 0.26em; color: var(--gold-deep); text-transform: uppercase; }
+    .os-card h3 { font-family: var(--serif); font-size: 1.7rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.06em; color: var(--cream); }
+    .os-card .note { font-size: 0.72rem; color: var(--muted); line-height: 1.6; flex: 1; }
+    .os-card a { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); text-decoration: none; }
+    .os-card a:hover { text-decoration: underline; }
+    .terminal {
+      border: 1px solid var(--line); border-radius: 8px; overflow: hidden;
+      background: #060402;
+    }
+    .terminal .bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.6rem 1rem; border-bottom: 1px solid var(--line);
+      font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted);
+    }
+    .terminal .tabs { display: flex; gap: 0.4rem; }
+    .terminal .tabs button {
+      font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+      background: none; border: 1px solid transparent; border-radius: 4px;
+      color: var(--muted); padding: 0.3rem 0.7rem; cursor: pointer;
+    }
+    .terminal .tabs button.active { color: var(--gold); border-color: var(--line); background: var(--ink-2); }
+    .terminal pre {
+      padding: 1.1rem 1.2rem; font-size: 0.78rem; line-height: 1.6;
+      color: var(--cream); overflow-x: auto; white-space: pre;
+    }
+    .terminal pre .p { color: var(--gold-deep); }
+    .copy-btn {
+      font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+      background: none; border: 1px solid var(--line); border-radius: 4px;
+      color: var(--muted); padding: 0.35rem 0.8rem; cursor: pointer; transition: color 0.15s, border-color 0.15s;
+    }
+    .copy-btn:hover { color: var(--gold); border-color: var(--gold-deep); }
+
+    /* features */
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+    .feature { background: var(--ink); padding: 2.1rem 1.8rem; display: flex; flex-direction: column; gap: 0.8rem; transition: background 0.2s; }
+    .feature:hover { background: var(--ink-2); }
+    .feature .num { font-size: 0.65rem; letter-spacing: 0.28em; color: var(--gold-deep); }
+    .feature h3 { font-family: var(--serif); font-size: 1.9rem; font-weight: 400; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gold); line-height: 1.08; }
+    .feature p { font-size: 0.74rem; line-height: 1.75; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+    /* marquee divider */
+    .marquee { overflow: hidden; border-block: 1px solid var(--line); padding: 0.85rem 0; white-space: nowrap; }
+    .marquee div { display: inline-block; animation: slide 30s linear infinite; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-deep); }
+    @keyframes slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* footer */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 3rem 1.5rem; text-align: center;
+      display: flex; flex-direction: column; gap: 0.9rem; align-items: center;
+      font-size: 0.66rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted);
+    }
+    footer .fmark { font-family: var(--serif); font-size: 2.2rem; color: var(--gold); letter-spacing: 0.14em; }
+    footer a { color: var(--muted); } footer a:hover { color: var(--gold); }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .marquee div, .scroll-hint { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="brand" href="#"><img src="mark.png" alt="" />Aquila</a>
+    <div class="links">
+      <a href="#install">Install</a>
+      <a href="#features">Features</a>
+      <a href="https://github.com/sekilov251/aquila-agent">GitHub</a>
+    </div>
+  </nav>
+
+  <header>
+    <div class="hero-art" aria-hidden="true"></div>
+    <span class="eyebrow">Open Source &bull; MIT License</span>
+    <h1>The Agent<br />That Earns<br />Its Wings</h1>
+    <p class="hero-sub">
+      AQUILA AGENT LEARNS YOUR WORLD — IT WRITES ITS OWN SKILLS, KEEPS ITS
+      MEMORY, AND SHOWS UP ON EVERY SURFACE YOU USE. BY SAVEZ.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-gold" href="https://github.com/sekilov251/aquila-agent/releases/latest/download/Aquila-Setup.exe">Download for Windows</a>
+      <a class="btn btn-ghost" href="#install">Install via Terminal</a>
+    </div>
+    <span class="scroll-hint">&darr; Scroll</span>
+  </header>
+
+  <section id="install">
+    <h2 class="kicker reveal">Get <span>Aquila</span></h2>
+    <div class="install-grid">
+      <div class="os-card reveal">
+        <span class="os">Windows 10 / 11</span>
+        <h3>Windows</h3>
+        <p class="note">One small setup wizard. It installs everything in the background — takes a few minutes.</p>
+        <a href="https://github.com/sekilov251/aquila-agent/releases/latest/download/Aquila-Setup.exe">Download Setup &rarr;</a>
+        <a href="https://github.com/sekilov251/aquila-agent/releases/latest/download/Aquila-0.17.0-win-x64.exe">Full offline installer &rarr;</a>
+      </div>
+      <div class="os-card reveal">
+        <span class="os">macOS 12+</span>
+        <h3>macOS</h3>
+        <p class="note">Install from the terminal — the script sets up Python, Git, and the app for you.</p>
+        <a href="#terminal">Install via terminal &rarr;</a>
+      </div>
+      <div class="os-card reveal">
+        <span class="os">Any distro</span>
+        <h3>Linux</h3>
+        <p class="note">Same one-line terminal install. Runs on anything from a $5 VPS to a GPU cluster.</p>
+        <a href="#terminal">Install via terminal &rarr;</a>
+      </div>
+    </div>
+    <div class="terminal reveal" id="terminal">
+      <div class="bar">
+        <div class="tabs">
+          <button class="active" data-cmd="win">Windows</button>
+          <button data-cmd="nix">macOS / Linux</button>
+        </div>
+        <button class="copy-btn" id="copy">Copy</button>
+      </div>
+      <pre id="cmd"><span class="p">PS&gt;</span> irm https://raw.githubusercontent.com/sekilov251/aquila-agent/main/scripts/install.ps1 | iex</pre>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div>
+    AQUILA AGENT &bull; SELF-IMPROVING &bull; OPEN SOURCE &bull; GOLD STANDARD &bull; BY SAVEZ &bull;
+    AQUILA AGENT &bull; SELF-IMPROVING &bull; OPEN SOURCE &bull; GOLD STANDARD &bull; BY SAVEZ &bull;
+  </div></div>
+
+  <section id="features">
+    <h2 class="kicker reveal">Sharp by <span>Design</span></h2>
+    <div class="features">
+      <div class="feature reveal">
+        <span class="num">#1 &mdash; Connect</span>
+        <h3>Every Surface</h3>
+        <p>Telegram, Discord, Slack, WhatsApp, Signal, email, CLI, and a native desktop app. The same agent and the same memory, wherever you are.</p>
+      </div>
+      <div class="feature reveal">
+        <span class="num">#2 &mdash; Remember</span>
+        <h3>Memory That Compounds</h3>
+        <p>It keeps what it learns about your projects and your preferences — and it never forgets how it solved a problem.</p>
+      </div>
+      <div class="feature reveal">
+        <span class="num">#3 &mdash; Learn</span>
+        <h3>Skills From Experience</h3>
+        <p>Aquila writes its own skills as it works, then sharpens them with use. The longer you fly with it, the better it gets.</p>
+      </div>
+      <div class="feature reveal">
+        <span class="num">#4 &mdash; Schedule</span>
+        <h3>Works While You Sleep</h3>
+        <p>Plain-language scheduling for briefings, reports, and upkeep — running unattended through the gateway.</p>
+      </div>
+      <div class="feature reveal">
+        <span class="num">#5 &mdash; Delegate</span>
+        <h3>A Flock of Agents</h3>
+        <p>Spin up isolated subagents with their own conversations and terminals for pipelines that cost your context nothing.</p>
+      </div>
+      <div class="feature reveal">
+        <span class="num">#6 &mdash; Explore</span>
+        <h3>Eyes on the Web</h3>
+        <p>Web search, browser automation, vision, image generation, speech, and multi-model reasoning — built in.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="fmark">AQUILA</span>
+    <span>Aquila Agent v0.17.0 &mdash; by Savez</span>
+    <span><a href="https://github.com/sekilov251/aquila-agent">GitHub</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sekilov251/aquila-agent/blob/main/LICENSE">MIT License</a> &nbsp;&middot;&nbsp; 2026</span>
+  </footer>
+
+  <script>
+    const CMDS = {
+      win: '<span class="p">PS&gt;</span> irm https://raw.githubusercontent.com/sekilov251/aquila-agent/main/scripts/install.ps1 | iex',
+      nix: '<span class="p">$</span> curl -fsSL https://raw.githubusercontent.com/sekilov251/aquila-agent/main/scripts/install.sh | bash'
+    }
+    const PLAIN = {
+      win: 'irm https://raw.githubusercontent.com/sekilov251/aquila-agent/main/scripts/install.ps1 | iex',
+      nix: 'curl -fsSL https://raw.githubusercontent.com/sekilov251/aquila-agent/main/scripts/install.sh | bash'
+    }
+    let current = 'win'
+    document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => {
+      current = b.dataset.cmd
+      document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('active', x === b))
+      document.getElementById('cmd').innerHTML = CMDS[current]
+    }))
+    document.getElementById('copy').addEventListener('click', async e => {
+      try { await navigator.clipboard.writeText(PLAIN[current]); e.target.textContent = 'Copied'; setTimeout(() => (e.target.textContent = 'Copy'), 1400) } catch {}
+    })
+    const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && e.target.classList.add('in')), { threshold: 0.12 })
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el))
+  </script>
+</body>
+</html>
