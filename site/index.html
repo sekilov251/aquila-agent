@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Aquila Agent — by Savez</title>
+  <meta name="description" content="Aquila Agent — the self-improving AI agent by Savez. Download for Windows, macOS, and Linux." />
+  <style>
+    :root {
+      --gold: #f5c518;
+      --gold-deep: #c99e06;
+      --ink: #1a1710;
+      --bg: #fffdf3;
+      --muted: #71684c;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #151004; --ink: #f7e9b4; --muted: #c7b577; }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", -apple-system, system-ui, sans-serif;
+      background: var(--bg); color: var(--ink);
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 2rem;
+    }
+    .mark {
+      width: 84px; height: 84px; border-radius: 20px; margin-bottom: 2.25rem;
+      background: linear-gradient(160deg, #fcda5a 0%, var(--gold) 55%, #b28a08 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 12px 32px -12px rgba(201, 158, 6, 0.55);
+      font-weight: 800; font-size: 46px; color: #201900; letter-spacing: -1px;
+    }
+    h1 {
+      font-size: clamp(2.6rem, 8vw, 5rem); font-weight: 800; letter-spacing: 0.02em;
+      background: linear-gradient(175deg, #fcda5a 0%, var(--gold) 45%, var(--gold-deep) 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-transform: uppercase;
+    }
+    p.tagline { margin: 1.25rem auto 2.5rem; max-width: 34rem; color: var(--muted); font-size: 1.05rem; }
+    .cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: linear-gradient(180deg, #f9d23c, var(--gold) 60%, #e0b30f);
+      color: #201900; font-weight: 700; font-size: 1rem;
+      padding: 0.9rem 1.8rem; border-radius: 12px; text-decoration: none;
+      box-shadow: 0 10px 24px -10px rgba(201, 158, 6, 0.65), inset 0 1px 0 rgba(255,255,255,0.45);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .cta:hover { transform: translateY(-1px); box-shadow: 0 14px 28px -10px rgba(201, 158, 6, 0.75), inset 0 1px 0 rgba(255,255,255,0.45); }
+    .alt { margin-top: 1.1rem; font-size: 0.85rem; color: var(--muted); }
+    .alt a { color: inherit; }
+    footer { position: fixed; bottom: 1.25rem; font-size: 0.8rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="mark">A</div>
+  <h1>Aquila Agent</h1>
+  <p class="tagline">The agent that grows with you. Install it once — it sets everything up in the background and just works.</p>
+  <!-- TODO: replace href with your real release URL once published, e.g.
+       https://github.com/YOUR-USERNAME/aquila-agent/releases/latest/download/Aquila-0.17.0-win-x64.exe -->
+  <a class="cta" href="Aquila-0.17.0-win-x64.exe">Download for Windows &nbsp;→</a>
+  <p class="alt">macOS and Linux: build from source with <code>npm run dist:mac</code> / <code>dist:linux</code></p>
+  <footer>© 2026 Savez · Aquila Agent is MIT-licensed, based on Hermes Agent by Nous Research</footer>
+</body>
+</html>
