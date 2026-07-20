@@ -1,93 +1,93 @@
----
+﻿---
 sidebar_position: 3
 ---
 
-# 配置模型
+# é…ç½®æ¨¡åž‹
 
-Aquila 使用两类模型槽位：
+Aquila ä½¿ç”¨ä¸¤ç±»æ¨¡åž‹æ§½ä½ï¼š
 
-- **主模型** — agent 的思考核心。每条用户消息、每个工具调用循环、每次流式响应都经由该模型处理。
-- **辅助模型** — agent 卸载给较小模型的边缘任务。包括上下文压缩、视觉（图像分析）、网页摘要、审批评分、MCP 工具路由、会话标题生成和技能搜索。每项任务有独立槽位，可单独覆盖。
+- **ä¸»æ¨¡åž‹** â€” agent çš„æ€è€ƒæ ¸å¿ƒã€‚æ¯æ¡ç”¨æˆ·æ¶ˆæ¯ã€æ¯ä¸ªå·¥å…·è°ƒç”¨å¾ªçŽ¯ã€æ¯æ¬¡æµå¼å“åº”éƒ½ç»ç”±è¯¥æ¨¡åž‹å¤„ç†ã€‚
+- **è¾…åŠ©æ¨¡åž‹** â€” agent å¸è½½ç»™è¾ƒå°æ¨¡åž‹çš„è¾¹ç¼˜ä»»åŠ¡ã€‚åŒ…æ‹¬ä¸Šä¸‹æ–‡åŽ‹ç¼©ã€è§†è§‰ï¼ˆå›¾åƒåˆ†æžï¼‰ã€ç½‘é¡µæ‘˜è¦ã€å®¡æ‰¹è¯„åˆ†ã€MCP å·¥å…·è·¯ç”±ã€ä¼šè¯æ ‡é¢˜ç”Ÿæˆå’ŒæŠ€èƒ½æœç´¢ã€‚æ¯é¡¹ä»»åŠ¡æœ‰ç‹¬ç«‹æ§½ä½ï¼Œå¯å•ç‹¬è¦†ç›–ã€‚
 
-本页介绍如何通过仪表板配置上述两类模型。如需使用配置文件或 CLI，请跳至底部的[其他方法](#alternative-methods)。
+æœ¬é¡µä»‹ç»å¦‚ä½•é€šè¿‡ä»ªè¡¨æ¿é…ç½®ä¸Šè¿°ä¸¤ç±»æ¨¡åž‹ã€‚å¦‚éœ€ä½¿ç”¨é…ç½®æ–‡ä»¶æˆ– CLIï¼Œè¯·è·³è‡³åº•éƒ¨çš„[å…¶ä»–æ–¹æ³•](#alternative-methods)ã€‚
 
-:::tip 最快路径：Nous Portal
-[Nous Portal](/user-guide/features/tool-gateway) 在单一订阅下提供 300+ 个模型。全新安装后，运行 `hermes setup --portal` 即可登录并一键将 Nous 设为提供商。使用 `hermes portal info` 查看当前配置。
+:::tip æœ€å¿«è·¯å¾„ï¼šNous Portal
+[Nous Portal](/user-guide/features/tool-gateway) åœ¨å•ä¸€è®¢é˜…ä¸‹æä¾› 300+ ä¸ªæ¨¡åž‹ã€‚å…¨æ–°å®‰è£…åŽï¼Œè¿è¡Œ `hermes setup --portal` å³å¯ç™»å½•å¹¶ä¸€é”®å°† Nous è®¾ä¸ºæä¾›å•†ã€‚ä½¿ç”¨ `hermes portal info` æŸ¥çœ‹å½“å‰é…ç½®ã€‚
 :::
 
-## Models 页面
+## Models é¡µé¢
 
-打开仪表板，点击侧边栏中的 **Models**。页面分为两个区域：
+æ‰“å¼€ä»ªè¡¨æ¿ï¼Œç‚¹å‡»ä¾§è¾¹æ ä¸­çš„ **Models**ã€‚é¡µé¢åˆ†ä¸ºä¸¤ä¸ªåŒºåŸŸï¼š
 
-1. **Model Settings** — 顶部面板，用于为各槽位分配模型。
-2. **使用分析** — 按排名显示所选时间段内运行过会话的所有模型，包含 token 数量、费用和能力标签。
+1. **Model Settings** â€” é¡¶éƒ¨é¢æ¿ï¼Œç”¨äºŽä¸ºå„æ§½ä½åˆ†é…æ¨¡åž‹ã€‚
+2. **ä½¿ç”¨åˆ†æž** â€” æŒ‰æŽ’åæ˜¾ç¤ºæ‰€é€‰æ—¶é—´æ®µå†…è¿è¡Œè¿‡ä¼šè¯çš„æ‰€æœ‰æ¨¡åž‹ï¼ŒåŒ…å« token æ•°é‡ã€è´¹ç”¨å’Œèƒ½åŠ›æ ‡ç­¾ã€‚
 
-![Models 页面概览](/img/docs/dashboard-models/overview.png)
+![Models é¡µé¢æ¦‚è§ˆ](/img/docs/dashboard-models/overview.png)
 
-顶部卡片为 **Model Settings** 面板。主行始终显示 agent 将为新会话启动的模型。点击 **Change** 打开选择器。
+é¡¶éƒ¨å¡ç‰‡ä¸º **Model Settings** é¢æ¿ã€‚ä¸»è¡Œå§‹ç»ˆæ˜¾ç¤º agent å°†ä¸ºæ–°ä¼šè¯å¯åŠ¨çš„æ¨¡åž‹ã€‚ç‚¹å‡» **Change** æ‰“å¼€é€‰æ‹©å™¨ã€‚
 
-## 设置主模型
+## è®¾ç½®ä¸»æ¨¡åž‹
 
-点击主模型行上的 **Change**：
+ç‚¹å‡»ä¸»æ¨¡åž‹è¡Œä¸Šçš„ **Change**ï¼š
 
-![模型选择器对话框](/img/docs/dashboard-models/picker-dialog.png)
+![æ¨¡åž‹é€‰æ‹©å™¨å¯¹è¯æ¡†](/img/docs/dashboard-models/picker-dialog.png)
 
-选择器分为两列：
+é€‰æ‹©å™¨åˆ†ä¸ºä¸¤åˆ—ï¼š
 
-- **左列** — 已认证的提供商。仅显示已配置的提供商（已设置 API key、完成 OAuth 或定义了自定义端点）。若某提供商未出现，请前往 **Keys** 添加凭据。
-- **右列** — 所选提供商的精选模型列表。这些是 Aquila 针对该提供商推荐的 agentic 模型，而非原始的 `/models` 接口返回结果（OpenRouter 的原始列表包含 400+ 个模型，涵盖 TTS、图像生成器和重排序器）。
+- **å·¦åˆ—** â€” å·²è®¤è¯çš„æä¾›å•†ã€‚ä»…æ˜¾ç¤ºå·²é…ç½®çš„æä¾›å•†ï¼ˆå·²è®¾ç½® API keyã€å®Œæˆ OAuth æˆ–å®šä¹‰äº†è‡ªå®šä¹‰ç«¯ç‚¹ï¼‰ã€‚è‹¥æŸæä¾›å•†æœªå‡ºçŽ°ï¼Œè¯·å‰å¾€ **Keys** æ·»åŠ å‡­æ®ã€‚
+- **å³åˆ—** â€” æ‰€é€‰æä¾›å•†çš„ç²¾é€‰æ¨¡åž‹åˆ—è¡¨ã€‚è¿™äº›æ˜¯ Aquila é’ˆå¯¹è¯¥æä¾›å•†æŽ¨èçš„ agentic æ¨¡åž‹ï¼Œè€ŒéžåŽŸå§‹çš„ `/models` æŽ¥å£è¿”å›žç»“æžœï¼ˆOpenRouter çš„åŽŸå§‹åˆ—è¡¨åŒ…å« 400+ ä¸ªæ¨¡åž‹ï¼Œæ¶µç›– TTSã€å›¾åƒç”Ÿæˆå™¨å’Œé‡æŽ’åºå™¨ï¼‰ã€‚
 
-在过滤框中输入提供商名称、slug 或模型 ID 进行筛选。
+åœ¨è¿‡æ»¤æ¡†ä¸­è¾“å…¥æä¾›å•†åç§°ã€slug æˆ–æ¨¡åž‹ ID è¿›è¡Œç­›é€‰ã€‚
 
-选择模型后点击 **Switch**，Aquila 会将其写入 `~/.hermes/config.yaml` 的 `model` 部分。**此操作仅对新会话生效** — 已打开的聊天标签页将继续使用启动时的模型。如需在当前聊天中热切换，请在聊天内使用 `/model` 斜杠命令。
+é€‰æ‹©æ¨¡åž‹åŽç‚¹å‡» **Switch**ï¼ŒAquila ä¼šå°†å…¶å†™å…¥ `~/.hermes/config.yaml` çš„ `model` éƒ¨åˆ†ã€‚**æ­¤æ“ä½œä»…å¯¹æ–°ä¼šè¯ç”Ÿæ•ˆ** â€” å·²æ‰“å¼€çš„èŠå¤©æ ‡ç­¾é¡µå°†ç»§ç»­ä½¿ç”¨å¯åŠ¨æ—¶çš„æ¨¡åž‹ã€‚å¦‚éœ€åœ¨å½“å‰èŠå¤©ä¸­çƒ­åˆ‡æ¢ï¼Œè¯·åœ¨èŠå¤©å†…ä½¿ç”¨ `/model` æ–œæ å‘½ä»¤ã€‚
 
-## 设置辅助模型
+## è®¾ç½®è¾…åŠ©æ¨¡åž‹
 
-点击 **Show auxiliary** 展开 11 个任务槽位：
+ç‚¹å‡» **Show auxiliary** å±•å¼€ 11 ä¸ªä»»åŠ¡æ§½ä½ï¼š
 
-![辅助面板展开状态](/img/docs/dashboard-models/auxiliary-expanded.png)
+![è¾…åŠ©é¢æ¿å±•å¼€çŠ¶æ€](/img/docs/dashboard-models/auxiliary-expanded.png)
 
-每个辅助任务默认为 `auto`，即 Aquila 对该任务也使用主模型。当某个边缘任务需要更便宜或更快的模型时，可单独覆盖该槽位。
+æ¯ä¸ªè¾…åŠ©ä»»åŠ¡é»˜è®¤ä¸º `auto`ï¼Œå³ Aquila å¯¹è¯¥ä»»åŠ¡ä¹Ÿä½¿ç”¨ä¸»æ¨¡åž‹ã€‚å½“æŸä¸ªè¾¹ç¼˜ä»»åŠ¡éœ€è¦æ›´ä¾¿å®œæˆ–æ›´å¿«çš„æ¨¡åž‹æ—¶ï¼Œå¯å•ç‹¬è¦†ç›–è¯¥æ§½ä½ã€‚
 
-### 常见覆盖模式
+### å¸¸è§è¦†ç›–æ¨¡å¼
 
-| 任务 | 何时覆盖 |
+| ä»»åŠ¡ | ä½•æ—¶è¦†ç›– |
 |---|---|
-| **Title Gen（标题生成）** | 几乎总是。$0.10/M 的 flash 模型生成会话标题的效果与 Opus 相当。默认配置在 OpenRouter 上将此项设为 `google/gemini-3-flash-preview`。 |
-| **Vision（视觉）** | 当主模型是不支持视觉的编程模型时（如 Kimi、DeepSeek）。将其指向 `google/gemini-2.5-flash` 或 `gpt-4o-mini`。 |
-| **Compression（压缩）** | 当你在用 Opus/M2.7 的推理 token 来摘要上下文时。快速聊天模型以 1/50 的成本即可完成此工作。 |
-| **Approval（审批）** | 用于 `approval_mode: smart` — 由快速/廉价模型（haiku、flash、gpt-5-mini）决定是否自动批准低风险命令。此处使用昂贵模型是浪费。 |
-| **Web Extract（网页提取）** | 当你大量使用 `web_extract` 时。逻辑同压缩 — 摘要任务不需要推理能力。 |
-| **Skills Hub（技能中心）** | `hermes skills search` 使用此槽位。通常保持 `auto` 即可。 |
-| **MCP** | MCP 工具路由。通常保持 `auto` 即可。 |
+| **Title Genï¼ˆæ ‡é¢˜ç”Ÿæˆï¼‰** | å‡ ä¹Žæ€»æ˜¯ã€‚$0.10/M çš„ flash æ¨¡åž‹ç”Ÿæˆä¼šè¯æ ‡é¢˜çš„æ•ˆæžœä¸Ž Opus ç›¸å½“ã€‚é»˜è®¤é…ç½®åœ¨ OpenRouter ä¸Šå°†æ­¤é¡¹è®¾ä¸º `google/gemini-3-flash-preview`ã€‚ |
+| **Visionï¼ˆè§†è§‰ï¼‰** | å½“ä¸»æ¨¡åž‹æ˜¯ä¸æ”¯æŒè§†è§‰çš„ç¼–ç¨‹æ¨¡åž‹æ—¶ï¼ˆå¦‚ Kimiã€DeepSeekï¼‰ã€‚å°†å…¶æŒ‡å‘ `google/gemini-2.5-flash` æˆ– `gpt-4o-mini`ã€‚ |
+| **Compressionï¼ˆåŽ‹ç¼©ï¼‰** | å½“ä½ åœ¨ç”¨ Opus/M2.7 çš„æŽ¨ç† token æ¥æ‘˜è¦ä¸Šä¸‹æ–‡æ—¶ã€‚å¿«é€ŸèŠå¤©æ¨¡åž‹ä»¥ 1/50 çš„æˆæœ¬å³å¯å®Œæˆæ­¤å·¥ä½œã€‚ |
+| **Approvalï¼ˆå®¡æ‰¹ï¼‰** | ç”¨äºŽ `approval_mode: smart` â€” ç”±å¿«é€Ÿ/å»‰ä»·æ¨¡åž‹ï¼ˆhaikuã€flashã€gpt-5-miniï¼‰å†³å®šæ˜¯å¦è‡ªåŠ¨æ‰¹å‡†ä½Žé£Žé™©å‘½ä»¤ã€‚æ­¤å¤„ä½¿ç”¨æ˜‚è´µæ¨¡åž‹æ˜¯æµªè´¹ã€‚ |
+| **Web Extractï¼ˆç½‘é¡µæå–ï¼‰** | å½“ä½ å¤§é‡ä½¿ç”¨ `web_extract` æ—¶ã€‚é€»è¾‘åŒåŽ‹ç¼© â€” æ‘˜è¦ä»»åŠ¡ä¸éœ€è¦æŽ¨ç†èƒ½åŠ›ã€‚ |
+| **Skills Hubï¼ˆæŠ€èƒ½ä¸­å¿ƒï¼‰** | `hermes skills search` ä½¿ç”¨æ­¤æ§½ä½ã€‚é€šå¸¸ä¿æŒ `auto` å³å¯ã€‚ |
+| **MCP** | MCP å·¥å…·è·¯ç”±ã€‚é€šå¸¸ä¿æŒ `auto` å³å¯ã€‚ |
 
-### 单任务覆盖
+### å•ä»»åŠ¡è¦†ç›–
 
-点击任意辅助行上的 **Change**，打开相同的选择器，操作方式相同 — 选择提供商和模型，点击 Switch。该行将从 `auto (use main model)` 更新为 `provider · model`。
+ç‚¹å‡»ä»»æ„è¾…åŠ©è¡Œä¸Šçš„ **Change**ï¼Œæ‰“å¼€ç›¸åŒçš„é€‰æ‹©å™¨ï¼Œæ“ä½œæ–¹å¼ç›¸åŒ â€” é€‰æ‹©æä¾›å•†å’Œæ¨¡åž‹ï¼Œç‚¹å‡» Switchã€‚è¯¥è¡Œå°†ä»Ž `auto (use main model)` æ›´æ–°ä¸º `provider Â· model`ã€‚
 
-### 全部重置为 auto
+### å…¨éƒ¨é‡ç½®ä¸º auto
 
-如果调整过度想重新开始，点击辅助区域顶部的 **Reset all to auto**。所有槽位将恢复使用主模型。
+å¦‚æžœè°ƒæ•´è¿‡åº¦æƒ³é‡æ–°å¼€å§‹ï¼Œç‚¹å‡»è¾…åŠ©åŒºåŸŸé¡¶éƒ¨çš„ **Reset all to auto**ã€‚æ‰€æœ‰æ§½ä½å°†æ¢å¤ä½¿ç”¨ä¸»æ¨¡åž‹ã€‚
 
-## "Use as" 快捷方式
+## "Use as" å¿«æ·æ–¹å¼
 
-页面上每张模型卡片都有 **Use as** 下拉菜单。这是快捷路径 — 从分析数据中选择一个模型，点击 **Use as**，一键将其分配到主槽位或任意辅助任务：
+é¡µé¢ä¸Šæ¯å¼ æ¨¡åž‹å¡ç‰‡éƒ½æœ‰ **Use as** ä¸‹æ‹‰èœå•ã€‚è¿™æ˜¯å¿«æ·è·¯å¾„ â€” ä»Žåˆ†æžæ•°æ®ä¸­é€‰æ‹©ä¸€ä¸ªæ¨¡åž‹ï¼Œç‚¹å‡» **Use as**ï¼Œä¸€é”®å°†å…¶åˆ†é…åˆ°ä¸»æ§½ä½æˆ–ä»»æ„è¾…åŠ©ä»»åŠ¡ï¼š
 
-![Use as 下拉菜单](/img/docs/dashboard-models/use-as-dropdown.png)
+![Use as ä¸‹æ‹‰èœå•](/img/docs/dashboard-models/use-as-dropdown.png)
 
-下拉菜单包含：
+ä¸‹æ‹‰èœå•åŒ…å«ï¼š
 
-- **Main model** — 与点击主行上的 Change 效果相同。
-- **All auxiliary tasks** — 将此模型分配给全部 11 个辅助槽位。适合将所有边缘任务统一切换到廉价 flash 模型的场景。
-- **单项任务选项** — Vision、Web Extract、Compression 等。每项任务当前分配的模型标记为 `current`。
+- **Main model** â€” ä¸Žç‚¹å‡»ä¸»è¡Œä¸Šçš„ Change æ•ˆæžœç›¸åŒã€‚
+- **All auxiliary tasks** â€” å°†æ­¤æ¨¡åž‹åˆ†é…ç»™å…¨éƒ¨ 11 ä¸ªè¾…åŠ©æ§½ä½ã€‚é€‚åˆå°†æ‰€æœ‰è¾¹ç¼˜ä»»åŠ¡ç»Ÿä¸€åˆ‡æ¢åˆ°å»‰ä»· flash æ¨¡åž‹çš„åœºæ™¯ã€‚
+- **å•é¡¹ä»»åŠ¡é€‰é¡¹** â€” Visionã€Web Extractã€Compression ç­‰ã€‚æ¯é¡¹ä»»åŠ¡å½“å‰åˆ†é…çš„æ¨¡åž‹æ ‡è®°ä¸º `current`ã€‚
 
-当模型卡片当前已分配到某个槽位时，会显示 `main` 或 `aux · <task>` 标签，方便一眼看出历史模型的使用情况。
+å½“æ¨¡åž‹å¡ç‰‡å½“å‰å·²åˆ†é…åˆ°æŸä¸ªæ§½ä½æ—¶ï¼Œä¼šæ˜¾ç¤º `main` æˆ– `aux Â· <task>` æ ‡ç­¾ï¼Œæ–¹ä¾¿ä¸€çœ¼çœ‹å‡ºåŽ†å²æ¨¡åž‹çš„ä½¿ç”¨æƒ…å†µã€‚
 
-## 写入 `config.yaml` 的内容
+## å†™å…¥ `config.yaml` çš„å†…å®¹
 
-通过仪表板保存时，Aquila 写入 `~/.hermes/config.yaml`：
+é€šè¿‡ä»ªè¡¨æ¿ä¿å­˜æ—¶ï¼ŒAquila å†™å…¥ `~/.hermes/config.yaml`ï¼š
 
-**主模型：**
+**ä¸»æ¨¡åž‹ï¼š**
 ```yaml
 model:
   provider: openrouter
@@ -96,7 +96,7 @@ model:
   api_mode: chat_completions
 ```
 
-**辅助覆盖示例（视觉任务使用 gemini-flash）：**
+**è¾…åŠ©è¦†ç›–ç¤ºä¾‹ï¼ˆè§†è§‰ä»»åŠ¡ä½¿ç”¨ gemini-flashï¼‰ï¼š**
 ```yaml
 auxiliary:
   vision:
@@ -109,7 +109,7 @@ auxiliary:
     download_timeout: 30
 ```
 
-**辅助任务处于 auto（默认）：**
+**è¾…åŠ©ä»»åŠ¡å¤„äºŽ autoï¼ˆé»˜è®¤ï¼‰ï¼š**
 ```yaml
 auxiliary:
   compression:
@@ -119,54 +119,54 @@ auxiliary:
     # ... other fields unchanged
 ```
 
-`provider: auto` 加 `model: ''` 表示 Aquila 对该任务使用主模型。
+`provider: auto` åŠ  `model: ''` è¡¨ç¤º Aquila å¯¹è¯¥ä»»åŠ¡ä½¿ç”¨ä¸»æ¨¡åž‹ã€‚
 
-## 何时生效？
+## ä½•æ—¶ç”Ÿæ•ˆï¼Ÿ
 
-- **CLI**（`hermes chat`）：下次执行 `hermes chat` 时生效。
-- **Gateway**（Telegram、Discord、Slack 等）：下一个*新*会话生效。现有会话保持原有模型。如需强制所有会话使用新配置，重启 gateway（`hermes gateway restart`）。
-- **仪表板聊天标签页**（`/chat`）：下一个新 PTY 生效。当前打开的聊天保持原有模型 — 在聊天内使用 `/model` 进行热切换。
+- **CLI**ï¼ˆ`hermes chat`ï¼‰ï¼šä¸‹æ¬¡æ‰§è¡Œ `hermes chat` æ—¶ç”Ÿæ•ˆã€‚
+- **Gateway**ï¼ˆTelegramã€Discordã€Slack ç­‰ï¼‰ï¼šä¸‹ä¸€ä¸ª*æ–°*ä¼šè¯ç”Ÿæ•ˆã€‚çŽ°æœ‰ä¼šè¯ä¿æŒåŽŸæœ‰æ¨¡åž‹ã€‚å¦‚éœ€å¼ºåˆ¶æ‰€æœ‰ä¼šè¯ä½¿ç”¨æ–°é…ç½®ï¼Œé‡å¯ gatewayï¼ˆ`hermes gateway restart`ï¼‰ã€‚
+- **ä»ªè¡¨æ¿èŠå¤©æ ‡ç­¾é¡µ**ï¼ˆ`/chat`ï¼‰ï¼šä¸‹ä¸€ä¸ªæ–° PTY ç”Ÿæ•ˆã€‚å½“å‰æ‰“å¼€çš„èŠå¤©ä¿æŒåŽŸæœ‰æ¨¡åž‹ â€” åœ¨èŠå¤©å†…ä½¿ç”¨ `/model` è¿›è¡Œçƒ­åˆ‡æ¢ã€‚
 
-更改不会使运行中会话的 prompt 缓存失效。这是有意为之：在会话内切换主模型需要重置缓存（系统 prompt 包含模型特定内容），该操作保留给聊天内的显式 `/model` 斜杠命令。
+æ›´æ”¹ä¸ä¼šä½¿è¿è¡Œä¸­ä¼šè¯çš„ prompt ç¼“å­˜å¤±æ•ˆã€‚è¿™æ˜¯æœ‰æ„ä¸ºä¹‹ï¼šåœ¨ä¼šè¯å†…åˆ‡æ¢ä¸»æ¨¡åž‹éœ€è¦é‡ç½®ç¼“å­˜ï¼ˆç³»ç»Ÿ prompt åŒ…å«æ¨¡åž‹ç‰¹å®šå†…å®¹ï¼‰ï¼Œè¯¥æ“ä½œä¿ç•™ç»™èŠå¤©å†…çš„æ˜¾å¼ `/model` æ–œæ å‘½ä»¤ã€‚
 
-## 故障排查
+## æ•…éšœæŽ’æŸ¥
 
-### 选择器中显示"No authenticated providers"
+### é€‰æ‹©å™¨ä¸­æ˜¾ç¤º"No authenticated providers"
 
-Aquila 仅列出具有有效凭据的提供商。检查侧边栏中的 **Keys** — 应存在以下之一：API key、成功的 OAuth 或自定义端点 URL。若所需提供商不在列表中，运行 `hermes setup` 进行配置，或前往 **Keys** 添加环境变量。
+Aquila ä»…åˆ—å‡ºå…·æœ‰æœ‰æ•ˆå‡­æ®çš„æä¾›å•†ã€‚æ£€æŸ¥ä¾§è¾¹æ ä¸­çš„ **Keys** â€” åº”å­˜åœ¨ä»¥ä¸‹ä¹‹ä¸€ï¼šAPI keyã€æˆåŠŸçš„ OAuth æˆ–è‡ªå®šä¹‰ç«¯ç‚¹ URLã€‚è‹¥æ‰€éœ€æä¾›å•†ä¸åœ¨åˆ—è¡¨ä¸­ï¼Œè¿è¡Œ `hermes setup` è¿›è¡Œé…ç½®ï¼Œæˆ–å‰å¾€ **Keys** æ·»åŠ çŽ¯å¢ƒå˜é‡ã€‚
 
-### 主模型在运行中的聊天里未发生变化
+### ä¸»æ¨¡åž‹åœ¨è¿è¡Œä¸­çš„èŠå¤©é‡Œæœªå‘ç”Ÿå˜åŒ–
 
-符合预期。仪表板写入 `config.yaml`，新会话读取该文件。当前打开的聊天是一个活跃的 agent 进程 — 它保持启动时的模型。在聊天内使用 `/model <name>` 对该会话进行热切换。
+ç¬¦åˆé¢„æœŸã€‚ä»ªè¡¨æ¿å†™å…¥ `config.yaml`ï¼Œæ–°ä¼šè¯è¯»å–è¯¥æ–‡ä»¶ã€‚å½“å‰æ‰“å¼€çš„èŠå¤©æ˜¯ä¸€ä¸ªæ´»è·ƒçš„ agent è¿›ç¨‹ â€” å®ƒä¿æŒå¯åŠ¨æ—¶çš„æ¨¡åž‹ã€‚åœ¨èŠå¤©å†…ä½¿ç”¨ `/model <name>` å¯¹è¯¥ä¼šè¯è¿›è¡Œçƒ­åˆ‡æ¢ã€‚
 
-### 辅助覆盖"未生效"
+### è¾…åŠ©è¦†ç›–"æœªç”Ÿæ•ˆ"
 
-检查以下三点：
+æ£€æŸ¥ä»¥ä¸‹ä¸‰ç‚¹ï¼š
 
-1. **是否启动了新会话？** 现有聊天不会重新读取配置。
-2. **`provider` 是否设置为非 `auto` 的值？** 若字段显示 `auto`，该任务仍在使用主模型。点击 **Change** 选择实际的提供商。
-3. **提供商是否已认证？** 若将 `minimax` 分配给某任务但没有 MiniMax API key，该任务将回退到 openrouter 默认值，并在 `agent.log` 中记录警告。
+1. **æ˜¯å¦å¯åŠ¨äº†æ–°ä¼šè¯ï¼Ÿ** çŽ°æœ‰èŠå¤©ä¸ä¼šé‡æ–°è¯»å–é…ç½®ã€‚
+2. **`provider` æ˜¯å¦è®¾ç½®ä¸ºéž `auto` çš„å€¼ï¼Ÿ** è‹¥å­—æ®µæ˜¾ç¤º `auto`ï¼Œè¯¥ä»»åŠ¡ä»åœ¨ä½¿ç”¨ä¸»æ¨¡åž‹ã€‚ç‚¹å‡» **Change** é€‰æ‹©å®žé™…çš„æä¾›å•†ã€‚
+3. **æä¾›å•†æ˜¯å¦å·²è®¤è¯ï¼Ÿ** è‹¥å°† `minimax` åˆ†é…ç»™æŸä»»åŠ¡ä½†æ²¡æœ‰ MiniMax API keyï¼Œè¯¥ä»»åŠ¡å°†å›žé€€åˆ° openrouter é»˜è®¤å€¼ï¼Œå¹¶åœ¨ `agent.log` ä¸­è®°å½•è­¦å‘Šã€‚
 
-### 我选择了模型，但 Aquila 切换了提供商
+### æˆ‘é€‰æ‹©äº†æ¨¡åž‹ï¼Œä½† Aquila åˆ‡æ¢äº†æä¾›å•†
 
-在 OpenRouter（或任何聚合器）上，裸模型名称会优先在聚合器内解析。因此 OpenRouter 上的 `claude-sonnet-4` 会解析为 `anthropic/claude-sonnet-4.6`，保持在你的 OpenRouter 认证下。但若在原生 Anthropic 认证下输入 `claude-sonnet-4`，则会保持为 `claude-sonnet-4-6`。若出现意外的提供商切换，请确认当前提供商是否符合预期 — 选择器始终在对话框顶部显示当前主模型。
+åœ¨ OpenRouterï¼ˆæˆ–ä»»ä½•èšåˆå™¨ï¼‰ä¸Šï¼Œè£¸æ¨¡åž‹åç§°ä¼šä¼˜å…ˆåœ¨èšåˆå™¨å†…è§£æžã€‚å› æ­¤ OpenRouter ä¸Šçš„ `claude-sonnet-4` ä¼šè§£æžä¸º `anthropic/claude-sonnet-4.6`ï¼Œä¿æŒåœ¨ä½ çš„ OpenRouter è®¤è¯ä¸‹ã€‚ä½†è‹¥åœ¨åŽŸç”Ÿ Anthropic è®¤è¯ä¸‹è¾“å…¥ `claude-sonnet-4`ï¼Œåˆ™ä¼šä¿æŒä¸º `claude-sonnet-4-6`ã€‚è‹¥å‡ºçŽ°æ„å¤–çš„æä¾›å•†åˆ‡æ¢ï¼Œè¯·ç¡®è®¤å½“å‰æä¾›å•†æ˜¯å¦ç¬¦åˆé¢„æœŸ â€” é€‰æ‹©å™¨å§‹ç»ˆåœ¨å¯¹è¯æ¡†é¡¶éƒ¨æ˜¾ç¤ºå½“å‰ä¸»æ¨¡åž‹ã€‚
 
-## 其他方法 {#alternative-methods}
+## å…¶ä»–æ–¹æ³• {#alternative-methods}
 
-### CLI 斜杠命令
+### CLI æ–œæ å‘½ä»¤
 
-在任意 `hermes chat` 会话内：
+åœ¨ä»»æ„ `hermes chat` ä¼šè¯å†…ï¼š
 
 ```
-/model gpt-5.4 --provider openrouter             # 仅当前会话
-/model gpt-5.4 --provider openrouter --global    # 同时持久化到 config.yaml
+/model gpt-5.4 --provider openrouter             # ä»…å½“å‰ä¼šè¯
+/model gpt-5.4 --provider openrouter --global    # åŒæ—¶æŒä¹…åŒ–åˆ° config.yaml
 ```
 
-`--global` 与仪表板 **Change** 按钮效果相同，并额外在当前会话内原地切换模型。
+`--global` ä¸Žä»ªè¡¨æ¿ **Change** æŒ‰é’®æ•ˆæžœç›¸åŒï¼Œå¹¶é¢å¤–åœ¨å½“å‰ä¼šè¯å†…åŽŸåœ°åˆ‡æ¢æ¨¡åž‹ã€‚
 
-### 自定义别名
+### è‡ªå®šä¹‰åˆ«å
 
-为常用模型定义短名称，然后在 CLI 或任意消息平台中使用 `/model <alias>`：
+ä¸ºå¸¸ç”¨æ¨¡åž‹å®šä¹‰çŸ­åç§°ï¼Œç„¶åŽåœ¨ CLI æˆ–ä»»æ„æ¶ˆæ¯å¹³å°ä¸­ä½¿ç”¨ `/model <alias>`ï¼š
 
 ```yaml
 # ~/.hermes/config.yaml
@@ -179,59 +179,59 @@ model_aliases:
     provider: x-ai
 ```
 
-或通过 shell 命令（简写形式，`provider/model`）：
+æˆ–é€šè¿‡ shell å‘½ä»¤ï¼ˆç®€å†™å½¢å¼ï¼Œ`provider/model`ï¼‰ï¼š
 
 ```bash
 hermes config set model.aliases.fav anthropic/claude-opus-4.6
 hermes config set model.aliases.grok x-ai/grok-4
 ```
 
-然后在聊天中使用 `/model fav` 或 `/model grok`。用户别名会覆盖内置短名称（`sonnet`、`kimi`、`opus` 等）。完整参考请见[自定义模型别名](/reference/slash-commands#custom-model-aliases)。
+ç„¶åŽåœ¨èŠå¤©ä¸­ä½¿ç”¨ `/model fav` æˆ– `/model grok`ã€‚ç”¨æˆ·åˆ«åä¼šè¦†ç›–å†…ç½®çŸ­åç§°ï¼ˆ`sonnet`ã€`kimi`ã€`opus` ç­‰ï¼‰ã€‚å®Œæ•´å‚è€ƒè¯·è§[è‡ªå®šä¹‰æ¨¡åž‹åˆ«å](/reference/slash-commands#custom-model-aliases)ã€‚
 
-### `hermes model` 子命令
+### `hermes model` å­å‘½ä»¤
 
 ```bash
-hermes model            # 交互式提供商 + 模型选择器（切换默认值的标准方式）
+hermes model            # äº¤äº’å¼æä¾›å•† + æ¨¡åž‹é€‰æ‹©å™¨ï¼ˆåˆ‡æ¢é»˜è®¤å€¼çš„æ ‡å‡†æ–¹å¼ï¼‰
 ```
 
-`hermes model` 引导你选择提供商、完成认证（OAuth 流程会打开浏览器；API key 提供商会提示输入密钥），然后从该提供商的精选目录中选择具体模型。选择结果写入 `~/.hermes/config.yaml` 的 `model.provider` 和 `model.model` 字段。
+`hermes model` å¼•å¯¼ä½ é€‰æ‹©æä¾›å•†ã€å®Œæˆè®¤è¯ï¼ˆOAuth æµç¨‹ä¼šæ‰“å¼€æµè§ˆå™¨ï¼›API key æä¾›å•†ä¼šæç¤ºè¾“å…¥å¯†é’¥ï¼‰ï¼Œç„¶åŽä»Žè¯¥æä¾›å•†çš„ç²¾é€‰ç›®å½•ä¸­é€‰æ‹©å…·ä½“æ¨¡åž‹ã€‚é€‰æ‹©ç»“æžœå†™å…¥ `~/.hermes/config.yaml` çš„ `model.provider` å’Œ `model.model` å­—æ®µã€‚
 
-如需在不启动选择器的情况下列出提供商/模型，请使用仪表板或下方的 REST 端点。查看 CLI 当前实际使用的配置：`hermes config get model` 和 `hermes status`。
+å¦‚éœ€åœ¨ä¸å¯åŠ¨é€‰æ‹©å™¨çš„æƒ…å†µä¸‹åˆ—å‡ºæä¾›å•†/æ¨¡åž‹ï¼Œè¯·ä½¿ç”¨ä»ªè¡¨æ¿æˆ–ä¸‹æ–¹çš„ REST ç«¯ç‚¹ã€‚æŸ¥çœ‹ CLI å½“å‰å®žé™…ä½¿ç”¨çš„é…ç½®ï¼š`hermes config get model` å’Œ `hermes status`ã€‚
 
-### 直接编辑配置文件
+### ç›´æŽ¥ç¼–è¾‘é…ç½®æ–‡ä»¶
 
-编辑 `~/.hermes/config.yaml` 后重启相关服务。完整 schema 请见[配置参考](./configuration.md)。
+ç¼–è¾‘ `~/.hermes/config.yaml` åŽé‡å¯ç›¸å…³æœåŠ¡ã€‚å®Œæ•´ schema è¯·è§[é…ç½®å‚è€ƒ](./configuration.md)ã€‚
 
 ### REST API
 
-仪表板使用以下三个端点，可用于脚本化操作：
+ä»ªè¡¨æ¿ä½¿ç”¨ä»¥ä¸‹ä¸‰ä¸ªç«¯ç‚¹ï¼Œå¯ç”¨äºŽè„šæœ¬åŒ–æ“ä½œï¼š
 
 ```bash
-# 列出已认证的提供商及精选模型列表
-curl -H "X-Aquila-Session-Token: $TOKEN" http://localhost:PORT/api/model/options
+# åˆ—å‡ºå·²è®¤è¯çš„æä¾›å•†åŠç²¾é€‰æ¨¡åž‹åˆ—è¡¨
+curl -H "X-Hermes-Session-Token: $TOKEN" http://localhost:PORT/api/model/options
 
-# 读取当前主模型及辅助任务分配
-curl -H "X-Aquila-Session-Token: $TOKEN" http://localhost:PORT/api/model/auxiliary
+# è¯»å–å½“å‰ä¸»æ¨¡åž‹åŠè¾…åŠ©ä»»åŠ¡åˆ†é…
+curl -H "X-Hermes-Session-Token: $TOKEN" http://localhost:PORT/api/model/auxiliary
 
-# 设置主模型
-curl -X POST -H "Content-Type: application/json" -H "X-Aquila-Session-Token: $TOKEN" \
+# è®¾ç½®ä¸»æ¨¡åž‹
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
   -d '{"scope":"main","provider":"openrouter","model":"anthropic/claude-opus-4.7"}' \
   http://localhost:PORT/api/model/set
 
-# 覆盖单个辅助任务
-curl -X POST -H "Content-Type: application/json" -H "X-Aquila-Session-Token: $TOKEN" \
+# è¦†ç›–å•ä¸ªè¾…åŠ©ä»»åŠ¡
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
   -d '{"scope":"auxiliary","task":"vision","provider":"openrouter","model":"google/gemini-2.5-flash"}' \
   http://localhost:PORT/api/model/set
 
-# 将一个模型分配给所有辅助任务
-curl -X POST -H "Content-Type: application/json" -H "X-Aquila-Session-Token: $TOKEN" \
+# å°†ä¸€ä¸ªæ¨¡åž‹åˆ†é…ç»™æ‰€æœ‰è¾…åŠ©ä»»åŠ¡
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
   -d '{"scope":"auxiliary","task":"","provider":"openrouter","model":"google/gemini-2.5-flash"}' \
   http://localhost:PORT/api/model/set
 
-# 将所有辅助任务重置为 auto
-curl -X POST -H "Content-Type: application/json" -H "X-Aquila-Session-Token: $TOKEN" \
+# å°†æ‰€æœ‰è¾…åŠ©ä»»åŠ¡é‡ç½®ä¸º auto
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
   -d '{"scope":"auxiliary","task":"__reset__","provider":"","model":""}' \
   http://localhost:PORT/api/model/set
 ```
 
-session token 在启动时注入仪表板 HTML，每次服务器重启后轮换。如需对运行中的仪表板编写脚本，可从浏览器开发者工具中获取（`window.__HERMES_SESSION_TOKEN__`）。
+session token åœ¨å¯åŠ¨æ—¶æ³¨å…¥ä»ªè¡¨æ¿ HTMLï¼Œæ¯æ¬¡æœåŠ¡å™¨é‡å¯åŽè½®æ¢ã€‚å¦‚éœ€å¯¹è¿è¡Œä¸­çš„ä»ªè¡¨æ¿ç¼–å†™è„šæœ¬ï¼Œå¯ä»Žæµè§ˆå™¨å¼€å‘è€…å·¥å…·ä¸­èŽ·å–ï¼ˆ`window.__HERMES_SESSION_TOKEN__`ï¼‰ã€‚

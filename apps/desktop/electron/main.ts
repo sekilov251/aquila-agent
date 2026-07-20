@@ -3069,8 +3069,8 @@ async function applyUpdatesPosixInApp(opts: any) {
   }
 
   const rebuiltApp = [
-    path.join(updateRoot, 'apps', 'desktop', 'release', 'mac-arm64', 'Aquila.app'),
-    path.join(updateRoot, 'apps', 'desktop', 'release', 'mac', 'Aquila.app')
+    path.join(updateRoot, 'apps', 'desktop', 'release', 'mac-arm64', 'Aquila Agent.app'),
+    path.join(updateRoot, 'apps', 'desktop', 'release', 'mac', 'Aquila Agent.app')
   ].find(directoryExists)
 
   const targetApp = runningAppBundle()
@@ -3804,7 +3804,10 @@ function fetchJson(url, token, options: any = {}) {
         method: options.method || 'GET',
         headers: {
           'Content-Type': contentType,
-          'X-Aquila-Session-Token': token,
+          // Wire contract with the Python dashboard (hermes_cli/web_server.py):
+          // the header NAME must stay X-Hermes-Session-Token even though the
+          // product is Aquila — the backend validates it by exact name.
+          'X-Hermes-Session-Token': token,
           ...(body ? { 'Content-Length': String(body.length) } : {})
         }
       },
@@ -3870,7 +3873,7 @@ function fetchJson(url, token, options: any = {}) {
 function fetchPublicJson(url, options: any = {}) {
   // Credential-free JSON GET/POST for public gateway endpoints
   // (``/api/status``, ``/api/auth/providers``). Unlike ``fetchJson`` it sends
-  // NO ``X-Aquila-Session-Token`` header — used by the auth-mode probe before
+  // NO ``X-Hermes-Session-Token`` header — used by the auth-mode probe before
   // any credentials exist, and any time we must not leak a token to an
   // endpoint that doesn't need one.
   return new Promise((resolve, reject) => {

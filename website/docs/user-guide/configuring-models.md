@@ -1,4 +1,4 @@
----
+﻿---
 sidebar_position: 3
 ---
 
@@ -6,8 +6,8 @@ sidebar_position: 3
 
 Aquila uses two kinds of model slots:
 
-- **Main model** — what the agent thinks with. Every user message, every tool-call loop, every streamed response goes through this model.
-- **Auxiliary models** — smaller side-jobs the agent offloads. Context compression, vision (image analysis), web-page summarization, approval scoring, MCP tool routing, session-title generation, and skill search. Each has its own slot and can be overridden independently.
+- **Main model** â€” what the agent thinks with. Every user message, every tool-call loop, every streamed response goes through this model.
+- **Auxiliary models** â€” smaller side-jobs the agent offloads. Context compression, vision (image analysis), web-page summarization, approval scoring, MCP tool routing, session-title generation, and skill search. Each has its own slot and can be overridden independently.
 
 This page covers configuring both from the dashboard. If you prefer config files or the CLI, jump to [Alternative methods](#alternative-methods) at the bottom.
 
@@ -17,16 +17,16 @@ This page covers configuring both from the dashboard. If you prefer config files
 - Portal subscribers also get **10% off token-billed providers**.
 :::
 
-:::note `model:` schema — empty string vs. mapping
-On a brand-new install the bundled default config has `model: ""` (an empty string sentinel meaning "not configured yet"). The first time you run `hermes setup` or `hermes model`, that key is upgraded in-place to a mapping with `provider`, `default`, `base_url`, and `api_mode` sub-keys — the shape shown throughout this page and in [`profiles.md`](./profiles.md) / [`configuration.md`](./configuration.md). If you ever see an empty string in `config.yaml`, run `hermes model` (or click **Change** in the dashboard) and Aquila will write the dict form for you.
+:::note `model:` schema â€” empty string vs. mapping
+On a brand-new install the bundled default config has `model: ""` (an empty string sentinel meaning "not configured yet"). The first time you run `hermes setup` or `hermes model`, that key is upgraded in-place to a mapping with `provider`, `default`, `base_url`, and `api_mode` sub-keys â€” the shape shown throughout this page and in [`profiles.md`](./profiles.md) / [`configuration.md`](./configuration.md). If you ever see an empty string in `config.yaml`, run `hermes model` (or click **Change** in the dashboard) and Aquila will write the dict form for you.
 :::
 
 ## The Models page
 
 Open the dashboard and click **Models** in the sidebar. You get two sections:
 
-1. **Model Settings** — the top panel, where you assign models to slots.
-2. **Usage analytics** — ranked cards showing every model that ran a session in the selected period, with token counts, cost, and capability badges.
+1. **Model Settings** â€” the top panel, where you assign models to slots.
+2. **Usage analytics** â€” ranked cards showing every model that ran a session in the selected period, with token counts, cost, and capability badges.
 
 ![Models page overview](/img/docs/dashboard-models/overview.png)
 
@@ -40,19 +40,19 @@ Click **Change** on the Main model row:
 
 The picker has two columns:
 
-- **Left** — authenticated providers. Only providers you've set up (API key set, OAuth'd, or defined as a custom endpoint) show up here. If a provider is missing, head to **Keys** and add its credential.
-- **Right** — the curated model list for the selected provider. These are the agentic models Aquila recommends for that provider, not the raw `/models` dump (which on OpenRouter includes 400+ models including TTS, image generators, and rerankers).
+- **Left** â€” authenticated providers. Only providers you've set up (API key set, OAuth'd, or defined as a custom endpoint) show up here. If a provider is missing, head to **Keys** and add its credential.
+- **Right** â€” the curated model list for the selected provider. These are the agentic models Aquila recommends for that provider, not the raw `/models` dump (which on OpenRouter includes 400+ models including TTS, image generators, and rerankers).
 
 Type in the filter box to narrow by provider name, slug, or model ID.
 
-Pick a model, hit **Switch**, and Aquila writes it to `~/.hermes/config.yaml` under the `model` section. **This applies to new sessions only** — any chat tab you already have open keeps running whatever model it started with. To hot-swap the current chat, use the `/model` slash command inside it.
+Pick a model, hit **Switch**, and Aquila writes it to `~/.hermes/config.yaml` under the `model` section. **This applies to new sessions only** â€” any chat tab you already have open keeps running whatever model it started with. To hot-swap the current chat, use the `/model` slash command inside it.
 
 ### Mid-session switches and context warnings
 
-When you switch models **inside an active session** (Herm TUI model picker, `hermes` CLI, or `/model` on Telegram/Discord), Aquila estimates whether your **next message** will run **preflight context compression** against the new model's window. If the session is already near or above that model's compression threshold (see [Context Compression](./configuration.md#context-compression)), the switch reply includes a warning — the same `warning_message` path used for expensive-model notices. The switch still applies immediately; compression runs on the **first user message after the switch**, before the model answers.
+When you switch models **inside an active session** (Herm TUI model picker, `hermes` CLI, or `/model` on Telegram/Discord), Aquila estimates whether your **next message** will run **preflight context compression** against the new model's window. If the session is already near or above that model's compression threshold (see [Context Compression](./configuration.md#context-compression)), the switch reply includes a warning â€” the same `warning_message` path used for expensive-model notices. The switch still applies immediately; compression runs on the **first user message after the switch**, before the model answers.
 
 :::warning Mid-session switches reset the prompt cache
-Prompt caches are keyed to the model serving the request, so any mid-conversation model change — an explicit `/model` switch, an [automatic fallback](./features/fallback-providers.md), or a [credential-pool](./features/credential-pools.md) rotation onto a different account — means the next message re-reads the entire conversation at full input-token price instead of the cached (~75–90% discounted) rate. On a long session this one-time re-read can dwarf the per-token difference between the two models. Switch when you need to, but prefer doing it early in a conversation or right after starting a fresh session.
+Prompt caches are keyed to the model serving the request, so any mid-conversation model change â€” an explicit `/model` switch, an [automatic fallback](./features/fallback-providers.md), or a [credential-pool](./features/credential-pools.md) rotation onto a different account â€” means the next message re-reads the entire conversation at full input-token price instead of the cached (~75â€“90% discounted) rate. On a long session this one-time re-read can dwarf the per-token difference between the two models. Switch when you need to, but prefer doing it early in a conversation or right after starting a fresh session.
 :::
 
 ## Setting auxiliary models
@@ -61,7 +61,7 @@ Click **Show auxiliary** to reveal the 11 task slots:
 
 ![Auxiliary panel expanded](/img/docs/dashboard-models/auxiliary-expanded.png)
 
-Every auxiliary task defaults to `auto` — meaning Aquila tries your main model for that job too. If that route is unavailable or hits a capacity-style failure, `auto` follows any task-specific `auxiliary.<task>.fallback_chain`, then the main `fallback_providers` / `fallback_model` chain, then Aquila' built-in auxiliary discovery chain. Override a specific task when you want a cheaper or faster model for a side-job.
+Every auxiliary task defaults to `auto` â€” meaning Aquila tries your main model for that job too. If that route is unavailable or hits a capacity-style failure, `auto` follows any task-specific `auxiliary.<task>.fallback_chain`, then the main `fallback_providers` / `fallback_model` chain, then Aquila' built-in auxiliary discovery chain. Override a specific task when you want a cheaper or faster model for a side-job.
 
 ### Common override patterns
 
@@ -70,18 +70,18 @@ Every auxiliary task defaults to `auto` — meaning Aquila tries your main model
 | **Title Gen** | Almost always. A $0.10/M flash model writes session titles as well as Opus. Default config sets this to `google/gemini-3-flash-preview` on OpenRouter. |
 | **Vision** | When your main model lacks vision support. Point it at `google/gemini-2.5-flash` or `gpt-4o-mini`. |
 | **Compression** | When you're burning reasoning tokens on Opus/M2.7 just to summarize context. A fast chat model does the job at 1/50th the cost. |
-| **Approval** | For `approval_mode: smart` — a fast/cheap model (haiku, flash, gpt-5-mini) decides whether to auto-approve low-risk commands. Expensive models here are waste. |
-| **Web Extract** | When you use `web_extract` heavily. Same logic as compression — summarization doesn't need reasoning. |
+| **Approval** | For `approval_mode: smart` â€” a fast/cheap model (haiku, flash, gpt-5-mini) decides whether to auto-approve low-risk commands. Expensive models here are waste. |
+| **Web Extract** | When you use `web_extract` heavily. Same logic as compression â€” summarization doesn't need reasoning. |
 | **Skills Hub** | `hermes skills search` uses this. Usually fine at `auto`. |
 | **MCP** | MCP tool routing. Usually fine at `auto`. |
 | **Triage Specifier** | Routes the Kanban triage specifier (`hermes kanban specify`) that expands a rough one-liner into a concrete spec. A cheap, capable model works well. |
-| **Kanban Decomposer** | Routes Kanban task decomposition — splits a triage task into a graph of child tasks for specialist profiles. |
+| **Kanban Decomposer** | Routes Kanban task decomposition â€” splits a triage task into a graph of child tasks for specialist profiles. |
 | **Profile Describer** | Routes profile-description generation (`hermes profile describe --auto` / the dashboard auto-generate button). Short, cheap call. |
 | **Curator** | Routes the curator skill-usage review pass. Can run for minutes on reasoning models, so a cheaper aux model is often worthwhile. |
 
 ### Per-task override
 
-Click **Change** on any auxiliary row. Same picker opens, same behavior — pick provider + model, hit Switch. The row updates to show `provider · model` instead of `auto (use main model)`.
+Click **Change** on any auxiliary row. Same picker opens, same behavior â€” pick provider + model, hit Switch. The row updates to show `provider Â· model` instead of `auto (use main model)`.
 
 ### Reset all to auto
 
@@ -89,17 +89,17 @@ If you've over-tuned and want to start over, click **Reset all to auto** at the 
 
 ## The "Use as" shortcut
 
-Every model card on the page has a **Use as** dropdown. This is the fast path — pick a model you see in your analytics, click **Use as**, and assign it to the main slot or any specific auxiliary task in one click:
+Every model card on the page has a **Use as** dropdown. This is the fast path â€” pick a model you see in your analytics, click **Use as**, and assign it to the main slot or any specific auxiliary task in one click:
 
 ![Use as dropdown](/img/docs/dashboard-models/use-as-dropdown.png)
 
 The dropdown has:
 
-- **Main model** — same as clicking Change on the main row.
-- **All auxiliary tasks** — assigns this model to all 11 aux slots at once. Useful when you just want every side-job on a cheap flash model.
-- **Individual task options** — Vision, Web Extract, Compression, etc. The currently-assigned model for each task is marked `current`.
+- **Main model** â€” same as clicking Change on the main row.
+- **All auxiliary tasks** â€” assigns this model to all 11 aux slots at once. Useful when you just want every side-job on a cheap flash model.
+- **Individual task options** â€” Vision, Web Extract, Compression, etc. The currently-assigned model for each task is marked `current`.
 
-Cards are badged with `main` or `aux · <task>` when they're currently assigned to something — so you can see at a glance which of your historical models are wired in where.
+Cards are badged with `main` or `aux Â· <task>` when they're currently assigned to something â€” so you can see at a glance which of your historical models are wired in where.
 
 ## What gets written to `config.yaml`
 
@@ -114,7 +114,7 @@ model:
   api_mode: chat_completions
 ```
 
-**Auxiliary override (example — vision on gemini-flash):**
+**Auxiliary override (example â€” vision on gemini-flash):**
 ```yaml
 auxiliary:
   vision:
@@ -157,7 +157,7 @@ When `fallback_chain` is absent, `auto` uses the top-level `fallback_providers` 
 
 - **CLI** (`hermes chat`): next `hermes chat` invocation.
 - **Gateway** (Telegram, Discord, Slack, etc.): next *new* session. Existing sessions keep their model. Restart the gateway (`hermes gateway restart`) if you want to force all sessions to pick up the change.
-- **Dashboard chat tab** (`/chat`): next new PTY. The currently-open chat keeps its model — use `/model` inside it to hot-swap.
+- **Dashboard chat tab** (`/chat`): next new PTY. The currently-open chat keeps its model â€” use `/model` inside it to hot-swap.
 
 Changes never invalidate prompt caches on running sessions. That's deliberate: swapping the main model inside a session requires a cache reset (the system prompt contains model-specific content), and we reserve that for the explicit `/model` slash command inside chat.
 
@@ -165,11 +165,11 @@ Changes never invalidate prompt caches on running sessions. That's deliberate: s
 
 ### "No authenticated providers" in the picker
 
-Aquila lists a provider only if it has a working credential. Check **Keys** in the sidebar — you should see one of: an API key, a successful OAuth, or a custom endpoint URL. If the provider you want isn't there, run `hermes setup` to wire it up, or go to **Keys** and add the env var.
+Aquila lists a provider only if it has a working credential. Check **Keys** in the sidebar â€” you should see one of: an API key, a successful OAuth, or a custom endpoint URL. If the provider you want isn't there, run `hermes setup` to wire it up, or go to **Keys** and add the env var.
 
 ### Main model didn't change in my running chat
 
-Expected. The dashboard writes `config.yaml`, which new sessions read. The currently-open chat is a live agent process — it keeps whatever model it was spawned with. Use `/model <name>` inside the chat to hot-swap that specific session.
+Expected. The dashboard writes `config.yaml`, which new sessions read. The currently-open chat is a live agent process â€” it keeps whatever model it was spawned with. Use `/model <name>` inside the chat to hot-swap that specific session.
 
 ### Auxiliary override "didn't take effect"
 
@@ -181,7 +181,7 @@ Three things to check:
 
 ### I picked a model but Aquila switched providers on me
 
-On OpenRouter (or any aggregator), bare model names resolve *within* the aggregator first. So `claude-sonnet-4` on OpenRouter becomes `anthropic/claude-sonnet-4.6`, staying on your OpenRouter auth. But if you typed `claude-sonnet-4` on a native Anthropic auth, it would stay as `claude-sonnet-4-6`. If you see an unexpected provider switch, check that your current provider is what you expect — the picker always shows the current main at the top of the dialog.
+On OpenRouter (or any aggregator), bare model names resolve *within* the aggregator first. So `claude-sonnet-4` on OpenRouter becomes `anthropic/claude-sonnet-4.6`, staying on your OpenRouter auth. But if you typed `claude-sonnet-4` on a native Anthropic auth, it would stay as `claude-sonnet-4-6`. If you see an unexpected provider switch, check that your current provider is what you expect â€” the picker always shows the current main at the top of the dialog.
 
 ## Alternative methods
 
@@ -197,17 +197,17 @@ Inside any `hermes chat` session:
 
 `--global` does the same thing the dashboard's **Change** button does, plus it switches the running session in-place.
 
-`--once` switches for a single turn and restores the previous model afterward — on success, error, or interrupt alike. Nothing is persisted: a gateway restart mid-turn comes back on the original model. Useful for escalating one hard question to an expensive model ("ask Opus just this once") or dropping to a cheap model for a throwaway query.
+`--once` switches for a single turn and restores the previous model afterward â€” on success, error, or interrupt alike. Nothing is persisted: a gateway restart mid-turn comes back on the original model. Useful for escalating one hard question to an expensive model ("ask Opus just this once") or dropping to a cheap model for a throwaway query.
 
 :::note Prompt-cache cost
-A one-turn switch breaks the provider's prompt-cache prefix twice (switching out and back). In a long session on a cached-prefix provider (Anthropic, OpenAI), the next turn re-pays full input cost — `--once` wins for short sessions or cheap→expensive escalation, but a quick side question inside a long expensive session can cost more than it saves.
+A one-turn switch breaks the provider's prompt-cache prefix twice (switching out and back). In a long session on a cached-prefix provider (Anthropic, OpenAI), the next turn re-pays full input cost â€” `--once` wins for short sessions or cheapâ†’expensive escalation, but a quick side question inside a long expensive session can cost more than it saves.
 :::
 
 ### Custom aliases
 
-Define your own short names for models you reach for often, then use `/model <alias>` in the CLI or any messaging platform. There are two equivalent formats — pick whichever fits your workflow.
+Define your own short names for models you reach for often, then use `/model <alias>` in the CLI or any messaging platform. There are two equivalent formats â€” pick whichever fits your workflow.
 
-**Canonical (top-level `model_aliases:`)** — full control over provider + base_url:
+**Canonical (top-level `model_aliases:`)** â€” full control over provider + base_url:
 
 ```yaml
 # ~/.hermes/config.yaml
@@ -220,7 +220,7 @@ model_aliases:
     provider: x-ai
 ```
 
-**Short string form (`model.aliases.<name>: provider/model`)** — convenient from the shell because `hermes config set` only writes scalar values, but it can't carry a custom `base_url`:
+**Short string form (`model.aliases.<name>: provider/model`)** â€” convenient from the shell because `hermes config set` only writes scalar values, but it can't carry a custom `base_url`:
 
 ```bash
 hermes config set model.aliases.fav anthropic/claude-opus-4.6
@@ -251,28 +251,28 @@ The dashboard uses three endpoints. Useful for scripting:
 
 ```bash
 # List authenticated providers + curated model lists
-curl -H "X-Aquila-Session-Token: $TOKEN" http://localhost:PORT/api/model/options
+curl -H "X-Hermes-Session-Token: $TOKEN" http://localhost:PORT/api/model/options
 
 # Read current main + auxiliary assignments
-curl -H "X-Aquila-Session-Token: $TOKEN" http://localhost:PORT/api/model/auxiliary
+curl -H "X-Hermes-Session-Token: $TOKEN" http://localhost:PORT/api/model/auxiliary
 
 # Set the main model
-curl -X POST -H "Content-Type: application/json" -H "X-Aquila-Session-Token: $TOKEN" \
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
   -d '{"scope":"main","provider":"openrouter","model":"anthropic/claude-opus-4.7"}' \
   http://localhost:PORT/api/model/set
 
 # Override a single auxiliary task
-curl -X POST -H "Content-Type: application/json" -H "X-Aquila-Session-Token: $TOKEN" \
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
   -d '{"scope":"auxiliary","task":"vision","provider":"openrouter","model":"google/gemini-2.5-flash"}' \
   http://localhost:PORT/api/model/set
 
 # Assign one model to every auxiliary task
-curl -X POST -H "Content-Type: application/json" -H "X-Aquila-Session-Token: $TOKEN" \
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
   -d '{"scope":"auxiliary","task":"","provider":"openrouter","model":"google/gemini-2.5-flash"}' \
   http://localhost:PORT/api/model/set
 
 # Reset all auxiliary tasks to auto
-curl -X POST -H "Content-Type: application/json" -H "X-Aquila-Session-Token: $TOKEN" \
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
   -d '{"scope":"auxiliary","task":"__reset__","provider":"","model":""}' \
   http://localhost:PORT/api/model/set
 ```
