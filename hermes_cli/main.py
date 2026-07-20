@@ -244,7 +244,7 @@ def _read_openai_version_fast() -> str | None:
 def _print_fast_version_info() -> None:
     from hermes_cli import __release_date__, __version__
 
-    print(f"Hermes Agent v{__version__} ({__release_date__})")
+    print(f"Aquila Agent v{__version__} ({__release_date__})")
     print(f"Install directory: {PROJECT_ROOT}")
 
     print(f"Python: {sys.version.split()[0]}")
@@ -5208,15 +5208,22 @@ def _desktop_packaged_executable(desktop_dir: Path) -> Optional[Path]:
     """Return the current platform's unpacked Electron app executable."""
     release_dir = desktop_dir / "release"
     if sys.platform == "darwin":
-        candidates = list(release_dir.glob("mac*/Hermes.app/Contents/MacOS/Hermes"))
+        candidates = list(release_dir.glob("mac*/Aquila*.app/Contents/MacOS/Aquila")) + list(
+            release_dir.glob("mac*/Hermes.app/Contents/MacOS/Hermes")
+        )
     elif sys.platform == "win32":
         candidates = [
+            release_dir / "win-unpacked" / "Aquila.exe",
+            release_dir / "win-arm64-unpacked" / "Aquila.exe",
+            # Pre-rebrand checkouts built Hermes.exe; keep as fallback.
             release_dir / "win-unpacked" / "Hermes.exe",
             release_dir / "win-ia32-unpacked" / "Hermes.exe",
             release_dir / "win-arm64-unpacked" / "Hermes.exe",
         ]
     else:
         candidates = [
+            release_dir / "linux-unpacked" / "Aquila",
+            release_dir / "linux-arm64-unpacked" / "Aquila",
             release_dir / "linux-unpacked" / "hermes",
             release_dir / "linux-unpacked" / "Hermes",
             release_dir / "linux-arm64-unpacked" / "hermes",
