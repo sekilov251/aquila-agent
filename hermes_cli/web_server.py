@@ -10325,6 +10325,18 @@ def _codex_device_code_start_error(resp: Any) -> str:
     status = getattr(resp, "status_code", "unknown")
     detail = _http_response_error_detail(resp)
     lower = detail.lower()
+    # Cloudflare bot-check / rate-limit: the "detail" is a full challenge HTML
+    # page ("Just a moment..."). Dumping it at the user is useless — explain
+    # what actually happened and what to do.
+    if status == 429 or "challenges.cloudflare.com" in lower or "just a moment" in lower:
+        return (
+            "OpenAI's sign-in service temporarily blocked this request "
+            "(rate limit / bot verification). This usually clears on its own: "
+            "wait a few minutes and click Login again. If you are on a VPN or "
+            "proxy, try without it. Alternatively, connect with an OpenAI API "
+            "key or another provider instead of the ChatGPT sign-in. "
+            f"(HTTP {status})"
+        )
     if "device" in lower and ("authori" in lower or "enable" in lower):
         message = (
             "OpenAI rejected the device-code login request. Your OpenAI "
@@ -10365,13 +10377,22 @@ def _codex_full_login_worker(session_id: str) -> None:
             DEFAULT_CODEX_BASE_URL,
         )
         issuer = "https://auth.openai.com"
+        # Identify as a product, not a bare python-httpx client — generic
+        # script user agents are far more likely to trip Cloudflare's bot
+        # verification on auth.openai.com (surfacing as HTTP 429
+        # "Just a moment..." challenge pages).
+        _ua_headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "AquilaAgent/0.17 (+https://github.com/sekilov251/aquila-agent)",
+        }
 
         # Step 1: request device code
         with httpx.Client(timeout=httpx.Timeout(15.0)) as client:
             resp = client.post(
                 f"{issuer}/api/accounts/deviceauth/usercode",
                 json={"client_id": CODEX_OAUTH_CLIENT_ID},
-                headers={"Content-Type": "application/json"},
+                headers=_ua_headers,
             )
         if resp.status_code != 200:
             raise RuntimeError(_codex_device_code_start_error(resp))
@@ -10402,7 +10423,7 @@ def _codex_full_login_worker(session_id: str) -> None:
                 poll = client.post(
                     f"{issuer}/api/accounts/deviceauth/token",
                     json={"device_auth_id": device_auth_id, "user_code": user_code},
-                    headers={"Content-Type": "application/json"},
+                    headers=_ua_headers,
                 )
                 if poll.status_code == 200:
                     code_resp = poll.json()
